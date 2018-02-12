@@ -1,0 +1,163 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.work_zone {
+    display: flex;
+
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: 10px;
+
+    width: 600px;
+    height: 500px;
+    border: solid 2px black;
+}
+
+
+.work_zone .sidebar {
+    padding: 0;
+    margin: 0;
+    order: 1;
+    width: 100px;
+}
+
+.work_zone .sidebar ul {
+    list-style: none;
+}
+
+.work_zone .sidebar a {
+    display: inline-block;
+    width: 55px;
+    height: 55px;
+    background-size: cover;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.work_zone .sidebar .btn.current { border: solid 2px blue; }
+
+.work_zone .sidebar .btn {
+    border: solid 2px black;
+}
+
+.work_zone .sidebar .disk-size {
+    width: 50px;
+}
+
+/*
+canvas {
+    cursor: none;
+}
+*/
+
+#backCanvas {
+    position: absolute;
+    background: url("../images/bgDessin.png") round;
+    background-size: 50px;
+}
+
+#frontCanvas {
+    opacity: 0.8;
+}
+
+
+.btn-brush { background-image: url("../images/icone-pinceau.png") }
+.btn-rubber {background-image: url("../images/icone-gomme.png") }
+.btn-line { background-image: url("../images/icone-trait.png") }
+.btn-square { background-image: url("../images/icone-rectangle.png") }
+.btn-new { background-image: url("../images/icone-nouveau.png") }
+.btn-open { background-image: url("../images/icone-ouvrir.png") }
+.btn-save { background-image: url("../images/icone-enregistrer.png") }
+
+.btn-trash {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: url("../images/icone-supprimer.png");
+    background-size: cover;
+    border:none;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.clearfix.hidden { display: none;}
+.clearfix {
+    position: absolute;
+    width:600px;
+    height: 500px;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+
+.clearfix .loadImage {
+    background: lightgray;
+
+    width: 300px;
+    height: 350px;
+
+    margin-top: 75px;
+    margin-right: auto;
+    margin-left: auto;
+
+    border-radius: 5%;
+    border: solid 2px black;
+
+    padding: 10px;
+    overflow: hidden;
+}
+
+.clearfix #imageContainer {
+    height: 100%;
+    width: 100%;
+    display: block;
+    overflow-y: scroll;
+    padding-bottom: 50px;
+}
+
+.clearfix #imageContainer::-webkit-scrollbar {
+    background-color: transparent;
+}
+
+.clearfix h3 {
+    font-weight: bold;
+    text-align: center;
+}
+
+.clearfix .loadImage #closeWindow {
+    float: right;
+    background: none;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    font-size: 2em;
+    color:black;
+}
+
+.element {
+    display: block;
+}
+
+.element span {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: right;
+    font-weight: bold;
+    padding: 5px;
+    margin: 5px;
+    width:100px;
+}
+
+.element img {
+    width:100px;
+    height: 100px;
+    border:solid 1px black;
+    vertical-align: middle;
+
+    cursor: pointer;
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chat</title>
+        <link rel="stylesheet" href="../css/chat.css">
+    <body>
+        <div id="pseudo-box" class="pseudo-box">
+            <div class="pseudo-body">
+                <h3 id="pseudo-title">Choissisez votre pseudo :</h3>
+                <input type="text" id="input-username" class="input-username">
+                <button class="pseudo-btn connect-btn" id="connect-btn">Se connecter</button>
+                <button class="pseudo-btn cancel-btn">Retour à l'accueil</button>
+            </div>
+        </div>
+
+        <div id="chat-box" class="chat-box hidden">
+            <div class="chat-heading" id="chat-heading">
+                Chat de Robocode - Utilisateur : {user}
+            </div>
+            <div class="chat-body">
+                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-users" id="chat-users"></div>
+                <div class="chat-footer">
+                    <input type="text" class="input-text" id="input-text">
+                    <button class="button-send" id="button-send">Envoyer</button>
+
+                    <button class="button-close" id="close-btn">Retour à l'acceuil</button>
+                </div>
+            </div>
+            <div class="chat-sidebar"></div>
+        </div>
+        <script type="text/javascript" src="../js/chat.js"></script>
+    </body>
+</html>

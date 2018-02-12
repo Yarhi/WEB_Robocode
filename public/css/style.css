@@ -1,0 +1,207 @@
+.container {
+    margin-top: 60px;
+}
+
+.carousel img {
+    top: 0;
+    left: 0;
+    min-width: 100%;
+}
+
+.footer {
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background-color: #f5f5f5;
+}
+
+.media {
+    margin: 10px;
+}
+
+.gi-2x{font-size: 2em;}
+.gi-3x{font-size: 3em;}
+.gi-4x{font-size: 4em;}
+.gi-5x{font-size: 5em;}
+
+.text-bold {
+    font-weight: bold;
+}
+
+@keyframes robotMoveBlue {
+    0%   {left: 0;}
+    25%  {transform: rotate(0deg)}
+    49%  {transform: rotate(180deg)}
+    50%  {left: 100%;}
+    75%  {transform: rotate(180deg)}
+    99%  {transform: rotate(0deg)}
+    100% {left: 0;}
+}
+
+@keyframes robotMoveRed {
+    0%   {right: 0;}
+    25%  {transform: rotate(0deg)}
+    49%  {transform: rotate(180deg)}
+    50%  {right: 100%;}
+    75%  {transform: rotate(180deg)}
+    99%  {transform: rotate(0deg)}
+    100% {right: 0;}
+}
+
+.robot {
+    width: 150px;
+    height: 150px;
+    background: url("../images/robot-chenilles.png") no-repeat center center;
+    background-size: 50%;
+}
+
+.robot::after {
+    content:"";
+    display: block;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.robot-blue {
+    position: sticky;
+    left: 0;
+    transform: rotate(0deg);
+
+    animation-name: robotMoveBlue;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+.robot-red {
+    position: sticky;
+    right: 0;
+    transform: rotate(0deg);
+
+    animation-name: robotMoveRed;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+.robot-blue::after {
+    background: url("../images/robot-corps-bleu.png") no-repeat center center;
+    background-size: 75%;
+}
+
+.robot-red::after {
+    background: url("../images/robot-corps-rouge.png") no-repeat center center;
+    background-size: 75%;
+    transform: rotate(180deg);
+}
+
+.orientation {
+    width: 100px;
+    height: 100px;
+}
+
+.orientation::before {
+    z-index: -2;
+    content:"";
+    display: block;
+    height: 100%;
+    top: -10px;
+    left: -10px;
+    width: 100%;
+    transform: rotate(-5deg);
+}
+
+#actionsSection .media {
+    min-height: 150px;
+}
+
+.orientation.back-north{
+    background: url("../images/nord-rouge.png") no-repeat bottom right;
+    background-size: 70%;
+}
+.orientation.back-north::before{
+    background: url("../images/nord-bleu.png") no-repeat 25% 25%;
+    background-size: 70%;
+}
+
+.orientation.back-east-west{
+    background: url("../images/ouest-bleu.png") no-repeat bottom right;
+    background-size: 70%;
+}
+.orientation.back-east-west::before{
+    background: url("../images/est-rouge.png") no-repeat 25% 25%;
+    background-size: 70%;
+}
+
+.orientation.back-take{
+    background: url("../images/repousser-rouge.png") no-repeat bottom right;
+    background-size: 70%;
+}
+.orientation.back-take::before{
+    background: url("../images/deposer-bleu.png") no-repeat 25% 25%;
+    background-size: 70%;
+}
+
+.orientation.back-deposit{
+    background: url("../images/prendre-bleu.png") no-repeat bottom right;
+    background-size: 70%;
+}
+.orientation.back-deposit::before{
+    background: url("../images/prendre-rouge.png") no-repeat 25% 25%;
+    background-size: 70%;
+}
+
+.orientation.back-repel{
+    background: url("../images/repousser-rouge.png") no-repeat bottom right;
+    background-size: 70%;
+}
+.orientation.back-repel::before{
+    background: url("../images/repousser-bleu.png") no-repeat 25% 25%;
+    background-size: 70%;
+}
+
+.orientation.back-cancel{
+    background: url("../images/annuler-rouge.png") no-repeat bottom right;
+    background-size: 70%;
+}
+.orientation.back-cancel::before{
+    background: url("../images/annuler-bleu.png") no-repeat 25% 25%;
+    background-size: 70%;
+}
+
+.orientation.back-x2{
+    background: url("../images/x2-bleu.png") no-repeat bottom right;
+    background-size: 70%;
+}
+.orientation.back-x2::before{
+    background: url("../images/x2-rouge.png") no-repeat 25% 25%;
+    background-size: 70%;
+}
+
+.orientation.back-pause{
+    background: url("../images/pause-bleu.png") no-repeat bottom right;
+    background-size: 70%;
+}
+.orientation.back-pause::before{
+    background: url("../images/pause-rouge.png") no-repeat 25% 25%;
+    background-size: 70%;
+}
+
+#duoMedia a, #chatMedia a { color: #000; }
+#duoMedia a:hover { color : #2b669a; }
+#chatMedia a:hover { color: #ac2925; }
+
+
+h2.toggle {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+input[type="checkbox"] { display: none; }
+input[type="checkbox"]:checked + section {
+    display: none;
+}
+
+
+
