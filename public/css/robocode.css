@@ -61,7 +61,8 @@ body {
 }
 
 .red-controls {
-    background: #c0392b;
+    background: linear-gradient(to bottom, #2980b9, #9b59b6);
+
 
     display: inline-block;
 
@@ -80,7 +81,7 @@ body {
 }
 
 .blue-controls {
-    background: #2980b9;
+    background: linear-gradient(to bottom, #2980b9, #9b59b6);
 
     display: inline-block;
 
@@ -117,7 +118,7 @@ body {
 }
 
 .main-footer {
-    background: linear-gradient(to right, #2980b9, #9b59b6);
+    background: linear-gradient(to left, #2980b9, #9b59b6);
 
     color: white;
 
@@ -127,6 +128,7 @@ body {
     height: 15%;
 
     margin: 1%;
+    padding: 1%;
 
 
     box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
@@ -134,6 +136,7 @@ body {
     border-radius: 5px;
     border: 1px solid black;
 }
+
 
 
 
@@ -154,3 +157,364 @@ body {
     border-spacing: 0 0;
 }
 
+.cell.red:not(.robot) {
+    background: #d63031;
+}
+
+.cell.blue:not(.robot) {
+    background: #0984e3;
+}
+
+.cell.flag-blue {
+    background: #ffeaa7 url("../images/flag-blue.png") no-repeat center center;
+    background-size: 75%;
+}
+
+.cell.flag-red {
+    background: #ffeaa7 url("../images/flag-red.png") no-repeat center center;
+    background-size: 75%;
+}
+
+.robot {
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+
+.robot-blue {
+    background: url("../images/robot-chenilles.png") no-repeat center center;
+    background-size: 50%;
+}
+
+.robot-red {
+    background: url("../images/robot-chenilles.png") no-repeat center center;
+    background-size: 50%;
+}
+
+.robot::after {
+    content:"";
+    display: block;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.robot-blue::after {
+    background: url("../images/robot-corps-bleu.png") no-repeat center center;
+    background-size: 75%;
+}
+
+.robot-red::after {
+    background: url("../images/robot-corps-rouge.png") no-repeat center center;
+    background-size: 75%;
+}
+
+.east {
+    transform: rotate(0deg);
+}
+
+.west {
+    transform: rotate(180deg);
+}
+
+.north {
+    transform: rotate(270deg);
+}
+
+.south {
+    transform: rotate(90deg);
+}
+
+/* block */
+
+.block {
+    width: 100px;
+    height: 100px;
+
+    margin: 6% auto;
+
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    font-size: 3em;
+    line-height: 100px;
+}
+
+.block-red {
+    background: url("../images/block-vide-rouge.png");
+    background-size: cover;
+}
+
+.block-blue {
+    background: url("../images/block-vide-bleu.png");
+    background-size: cover;
+}
+
+/* controls */
+
+.control-block {
+    display: inline-block;
+    margin: 2.5% 0.70%;
+
+    width: 70px;
+    height: 70px;
+}
+
+.control-block:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+.dragged-element:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+/* RED */
+.block.red-east {
+    font-size: 0;
+    background: url("../images/est-rouge.png");
+    background-size: cover;
+}
+.block.red-west {
+    font-size: 0;
+    background: url("../images/ouest-rouge.png");
+    background-size: cover;
+}
+.block.red-north {
+    font-size: 0;
+    background: url("../images/nord-rouge.png");
+    background-size: cover;
+}
+.block.red-south {
+    font-size: 0;
+    background: url("../images/sud-rouge.png");
+    background-size: cover;
+}
+.block.red-eastx2 {
+    font-size: 0;
+    background: url("../images/est-x2-rouge.png");
+    background-size: cover;
+}
+.block.red-take {
+    font-size: 0;
+    background: url("../images/prendre-rouge.png");
+    background-size: cover;
+}
+.block.red-put {
+    font-size: 0;
+    background: url("../images/deposer-rouge.png");
+    background-size: cover;
+}
+.block.red-push {
+    font-size: 0;
+    background: url("../images/repousser-rouge.png");
+    background-size: cover;
+}
+.block.red-cancel {
+    font-size: 0;
+    background: url("../images/annuler-rouge.png");
+    background-size: cover;
+}
+.block.red-x2 {
+    font-size: 0;
+    background: url("../images/x2-rouge.png");
+    background-size: cover;
+}
+.block.red-pause {
+    font-size: 0;
+    background: url("../images/pause-rouge.png");
+    background-size: cover;
+}
+
+/* BLUE */
+.block.blue-east {
+    font-size: 0;
+    background: url("../images/est-bleu.png");
+    background-size: cover;
+}
+.block.blue-west {
+    font-size: 0;
+    background: url("../images/ouest-bleu.png");
+    background-size: cover;
+}
+.block.blue-north {
+    font-size: 0;
+    background: url("../images/nord-bleu.png");
+    background-size: cover;
+}
+.block.blue-south {
+    font-size: 0;
+    background: url("../images/sud-bleu.png");
+    background-size: cover;
+}
+.block.blue-westx2 {
+    font-size: 0;
+    background: url("../images/ouest-x2-bleu.png");
+    background-size: cover;
+}
+.block.blue-take {
+    font-size: 0;
+    background: url("../images/prendre-bleu.png");
+    background-size: cover;
+}
+.block.blue-put {
+    font-size: 0;
+    background: url("../images/deposer-bleu.png");
+    background-size: cover;
+}
+.block.blue-push {
+    font-size: 0;
+    background: url("../images/repousser-bleu.png");
+    background-size: cover;
+}
+.block.blue-cancel {
+    font-size: 0;
+    background: url("../images/annuler-bleu.png");
+    background-size: cover;
+}
+.block.blue-x2 {
+    font-size: 0;
+    background: url("../images/x2-bleu.png");
+    background-size: cover;
+}
+.block.blue-pause {
+    font-size: 0;
+    background: url("../images/pause-bleu.png");
+    background-size: cover;
+}
+
+/* RED */
+.control-block.red-east:after {
+    background: url("../images/est-rouge.png");
+    background-size: cover;
+}
+.control-block.red-west:after {
+    background: url("../images/ouest-rouge.png");
+    background-size: cover;
+}
+.control-block.red-north:after {
+    background: url("../images/nord-rouge.png");
+    background-size: cover;
+}
+.control-block.red-south:after {
+    background: url("../images/sud-rouge.png");
+    background-size: cover;
+}
+.control-block.red-eastx2:after {
+    background: url("../images/est-x2-rouge.png");
+    background-size: cover;
+}
+.control-block.red-take:after {
+    background: url("../images/prendre-rouge.png");
+    background-size: cover;
+}
+.control-block.red-put:after {
+    background: url("../images/deposer-rouge.png");
+    background-size: cover;
+}
+.control-block.red-push:after {
+    background: url("../images/repousser-rouge.png");
+    background-size: cover;
+}
+.control-block.red-cancel:after {
+    background: url("../images/annuler-rouge.png");
+    background-size: cover;
+}
+.control-block.red-x2:after {
+    background: url("../images/x2-rouge.png");
+    background-size: cover;
+}
+.control-block.red-pause:after {
+    background: url("../images/pause-rouge.png");
+    background-size: cover;
+}
+
+/* BLUE */
+.control-block.blue-east:after {
+    background: url("../images/est-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-west:after {
+    background: url("../images/ouest-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-north:after {
+    background: url("../images/nord-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-south:after {
+    background: url("../images/sud-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-westx2:after {
+    background: url("../images/ouest-x2-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-take:after {
+    background: url("../images/prendre-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-put:after {
+    background: url("../images/deposer-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-push:after {
+    background: url("../images/repousser-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-cancel:after {
+    background: url("../images/annuler-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-x2:after {
+    background: url("../images/x2-bleu.png");
+    background-size: cover;
+}
+.control-block.blue-pause:after {
+    background: url("../images/pause-bleu.png");
+    background-size: cover;
+}
+
+@keyframes animation-north {
+    0% { bottom: 0;}
+    100% { bottom:100%; }
+}
+@keyframes animation-south {
+    0% { top: 0;}
+    100% { top:100%; }
+}
+@keyframes animation-east {
+    0% { left: 0;}
+    100% { left:100%; }
+}
+@keyframes animation-west {
+    0% { right: 0;}
+    100% { right:100%; }
+}
+
+.animate-north {
+    position: absolute;
+    animation-name: animation-north;
+    animation-duration: 1s;
+}
+.animate-south {
+    position: absolute;
+    animation-name: animation-south;
+    animation-duration: 1s;
+}
+.animate-east {
+    position: absolute;
+    animation-name: animation-east;
+    animation-duration: 1s;
+}
+.animate-west {
+    position: absolute;
+    animation-name: animation-west;
+    animation-duration: 1s;
+}
