@@ -125,7 +125,35 @@ class Player {
 
         // Execute if the method isn't null
         if ( actionMethod !== null )
-            actionInstance[actionMethod]();
+        {
+            var res = actionInstance[actionMethod]();
+
+            // Impossible action
+            if ( res === false && actionMethod !== "push")
+            {
+                // Creating emoji and adding animation
+                var emojiDom = document.createElement("span");
+                emojiDom.innerText = '!';
+                emojiDom.classList.add("emoji");
+
+                game.cells[this.robot.y][this.robot.x].dom.appendChild(emojiDom);
+
+                this.robot.dom.classList.add("bloqued");
+
+                var spanIndex = 0;
+                game.cells[this.robot.y][this.robot.x].dom.childNodes.forEach((e, index) => {
+                    if ( e.classList.contains("emoji") ) spanIndex = index;
+                });
+
+                console.log(spanIndex);
+
+
+                // Deleting after 1s (end of animation)
+                setTimeout(() => this.robot.dom.classList.remove("bloqued"), 1000);
+                setTimeout(() => game.cells[this.robot.y][this.robot.x].dom.removeChild(game.cells[this.robot.y][this.robot.x].dom.childNodes[spanIndex]), 1000);
+            }
+        }
+
 
         // Saving last action
         this.robot.lastAction = this.actions[this.actionIndex];
@@ -248,12 +276,21 @@ class Action {
     constructor(player) { this.player = player; }
 
     static allowedPosition(x, y) {
-        return ( x >= 0 && x <= 8 && y >= 0 && y <=8 );
+        return ( x >= 0 && x <= 8 && y >= 0 && y <=8 && game.cells[y][x].gotRobot === null);
     }
 
     north(verify)     {
         if ( ! Action.allowedPosition(this.player.robot.x, this.player.robot.y-1) )
+        {
+            // Setting orientation for 'bloqued' animation
+            var renemberOrientation = this.player.robot.orientationClass;
+            this.player.robot.setOrientation("north");
+
+            // After the animation, resetting the old one
+            setTimeout(() => this.player.robot.setOrientation(renemberOrientation), 1000);
+
             return false;
+        }
 
         if ( verify === undefined ) {
             this.player.robot.setOrientation("north");
@@ -264,7 +301,16 @@ class Action {
     }
     south(verify)     {
         if ( ! Action.allowedPosition(this.player.robot.x, this.player.robot.y+1) )
+        {
+            // Setting orientation for 'bloqued' animation
+            var renemberOrientation = this.player.robot.orientationClass;
+            this.player.robot.setOrientation("south");
+
+            // After the animation, resetting the old one
+            setTimeout(() => this.player.robot.setOrientation(renemberOrientation), 1000);
+
             return false;
+        }
 
         if ( verify === undefined ) {
             this.player.robot.setOrientation("south");
@@ -275,7 +321,16 @@ class Action {
     }
     east(verify)      {
         if ( ! Action.allowedPosition(this.player.robot.x+1, this.player.robot.y) )
+        {
+            // Setting orientation for 'bloqued' animation
+            var renemberOrientation = this.player.robot.orientationClass;
+            this.player.robot.setOrientation("east");
+
+            // After the animation, resetting the old one
+            setTimeout(() => this.player.robot.setOrientation(renemberOrientation), 1000);
+
             return false;
+        }
 
         if ( verify === undefined ) {
             this.player.robot.setOrientation("east");
@@ -286,7 +341,16 @@ class Action {
     }
     west(verify)      {
         if ( ! Action.allowedPosition(this.player.robot.x-1, this.player.robot.y) )
+        {
+            // Setting orientation for 'bloqued' animation
+            var renemberOrientation = this.player.robot.orientationClass;
+            this.player.robot.setOrientation("west");
+
+            // After the animation, resetting the old one
+            setTimeout(() => this.player.robot.setOrientation(renemberOrientation), 1000);
+
             return false;
+        }
 
         if ( verify === undefined ) {
             this.player.robot.setOrientation("west");
@@ -302,7 +366,16 @@ class Action {
         if ( goEast )
         {
             if ( ! Action.allowedPosition(this.player.robot.x+2, this.player.robot.y) )
+            {
+                // Setting orientation for 'bloqued' animation
+                var renemberOrientation = this.player.robot.orientationClass;
+                this.player.robot.setOrientation("east");
+
+                // After the animation, resetting the old one
+                setTimeout(() => this.player.robot.setOrientation(renemberOrientation), 1000);
+
                 return false;
+            }
 
             if ( verify === undefined ) {
                 this.player.robot.setOrientation("east");
@@ -312,7 +385,16 @@ class Action {
         else
         {
             if ( ! Action.allowedPosition(this.player.robot.x-2, this.player.robot.y) )
+            {
+                // Setting orientation for 'bloqued' animation
+                var renemberOrientation = this.player.robot.orientationClass;
+                this.player.robot.setOrientation("west");
+
+                // After the animation, resetting the old one
+                setTimeout(() => this.player.robot.setOrientation(renemberOrientation), 1000);
+
                 return false;
+            }
 
             if ( verify === undefined ) {
                 this.player.robot.setOrientation("west");
@@ -498,10 +580,10 @@ class Game {
             });
 
 
-
-            // Adding the control block
+            // Adding the control block event that allow to clear
             tile.addEventListener("dblclick", function() {
-                if ( game.currentPlayer.name === game.players[this.getAttribute("related-player")] )
+                console.log(game.currentPlayer.name, game.players[this.getAttribute("related-player")]);
+                if ( game.currentPlayer === game.players[this.getAttribute("related-player")] )
                     game.players[this.getAttribute("related-player")].controlBlock[this.getAttribute("data-id") - 1].clear();
             });
 
@@ -643,6 +725,7 @@ class Game {
         // Player red choose his controlBlock
         sentences.chooseActions("rouge");
         this.initControls("red");
+        game.currentPlayer = game.players.red;
 
         // Waiting until red player have finished to choose his controlBlock
         waitUntil( () => {
@@ -653,6 +736,7 @@ class Game {
             // Then, the blue player can choose his controlBlock
             sentences.chooseActions("bleu");
             this.initControls("blue");
+            game.currentPlayer = game.players.blue;
         });
 
         // Waiting until blue player (and red played then) have finished to choose his controlBlock
@@ -719,3 +803,5 @@ function init() {
 }
 
 init();
+
+

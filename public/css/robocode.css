@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Permanent+Marker|Press+Start+2P');
 
 html, body {
     width: 100%;
@@ -556,4 +556,80 @@ img.control-block {
     position: absolute;
     animation-name: animation-westx2;
     animation-duration: 1s;
+}
+
+
+@keyframes emoji-animate {
+    0%      { opacity: 0; font-size: 2em}
+    15%     { opacity: 0.5; font-size: 2.25em }
+    50%     { opacity: 1; font-size: 2.5em }
+    85%     { opacity: 0.5; font-size: 2.25em }
+    100%    { opacity: 0; font-size: 2em}
+}
+
+@keyframes animation-north-bloqued {
+    0%  { bottom: 0;}
+    50% { bottom:35%; }
+    100%  { bottom:0; }
+}
+@keyframes animation-south-bloqued {
+    0%  { top: 0;}
+    50% { top:35%; }
+    100%  { top:0; }
+}
+@keyframes animation-east-bloqued {
+    0%  { left: 0;}
+    50% { left:35%; }
+    100%  { left:0; }
+}
+@keyframes animation-west-bloqued {
+    0%  { right: 0;}
+    50% { right:35%; }
+    100%  { right:0; }
+}
+
+
+.emoji {
+
+    animation-name: emoji-animate;
+    animation-duration: 0.5s;
+
+    font-size: 2em;
+    font-family: "Press Start 2P", serif;
+    transform: rotate(10deg);
+
+    color: white;
+    left: 50%;
+    bottom: 75%;
+
+    opacity: 0;
+
+    position: absolute;
+    z-index: 999;
+    display: block;
+}
+
+.robot.north.bloqued {
+    position: absolute;
+    animation-name: animation-north-bloqued;
+    animation-duration: 0.5s;
+    animation-iteration-count: 2;
+}
+.robot.south.bloqued {
+    position: absolute;
+    animation-name: animation-south-bloqued;
+    animation-duration: 0.5s;
+    animation-iteration-count: 2;
+}
+.robot.east.bloqued {
+    position: absolute;
+    animation-name: animation-east-bloqued;
+    animation-duration: 0.5s;
+    animation-iteration-count: 2;
+}
+.robot.west.bloqued {
+    position: absolute;
+    animation-name: animation-west-bloqued;
+    animation-duration: 0.5s;
+    animation-iteration-count: 2;
 }
