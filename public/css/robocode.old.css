@@ -8,118 +8,133 @@ html, body {
 body {
     margin: 0 auto;
     font-family: "Open Sans", serif;
-    background: linear-gradient(to bottom left, #ECE9E6, #ffffff);
 }
 
 
 .main-panel {
-    background: linear-gradient(to top right, #076585, #cccccc);
-
     position: relative;
 
     display: flex;
     flex-wrap: wrap;
 
+    top: 5%;
     right: 0;
     bottom: 0;
     left: 0;
 
     margin: auto;
-
-
-    border-radius: 0 50px 0 50px;
-
-    width: 50vw;
-    height: auto;
-    flex-direction:row;
-
-    box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
-
+    width: 50%;
+    height: 75%;
 }
 
 
 .main-header {
-    /*background: linear-gradient(to right, #076585, #cccccc);*/
+    background: linear-gradient(to right, #2980b9, #9b59b6);
 
     color: white;
+
+    display: inline-block;
 
     width: 100%;
 
     height: 7%;
+    margin: 1%;
 
+    top: 0;
 
-    border-radius: 0 50px 0 0;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
 
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-    border-top: 2px solid black;
-
-
-    /*margin: 1%;*/
+    border-radius: 5px;
+    border: 1px solid black;
 }
 
 .main-header h2 {
+    vertical-align: middle;
     text-align: center;
+
+    line-height: 50%;
+
+    height: 100%;
+    /*
+    width: 100%;
+    */
 }
 
 .red-controls {
-    /*background: linear-gradient(to bottom, #076585, #cccccc);*/
+    background: linear-gradient(to bottom, #2980b9, #9b59b6);
 
 
+    display: inline-block;
+
+    margin: 1%;
+    flex:2;
+
+    /*
+    height: 88%;
+    */
     width: 15%;
 
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
 
-    /*border-radius: 5px;*/
-    border-left: 2px solid black;
-
-    /*margin: 1%;*/
+    border-radius: 5px;
+    border: 1px solid black;
 }
 
 .blue-controls {
-    /*background: linear-gradient(to top, #076585, #cccccc);*/
+    background: linear-gradient(to bottom, #2980b9, #9b59b6);
 
+    display: inline-block;
+
+    margin: 1%;
+    flex:2;
+
+    /*
+    height: 88%;
+    */
     width: 15%;
 
-    /*border-radius: 5px;*/
+    border-radius: 5px;
 
-
-    border-right: 2px solid black;
-
-    /*margin: 1%;*/
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
+    border: 1px solid black;
 }
 
 .game-table-container {
     background: #bdc3c7;
 
-    display: grid;
+    display: inline-block;
 
-    grid-template-columns: auto auto auto auto auto auto auto auto auto;
+    margin : 1%;
+    flex:8;
 
-    flex:8 0;
+    height: 88%;
+
+    border-radius: 5px;
 
     box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
     border: 1px solid black;
 
-    /*margin: 1%;*/
-
+    font-size: 0;
 }
 
 .main-footer {
-    /*background: linear-gradient(to left, #076585, #cccccc);*/
+    background: linear-gradient(to left, #2980b9, #9b59b6);
 
     color: white;
 
+    display: inline-block;
+
     width: 100%;
+    height: 15%;
+
+    margin: 1%;
+    padding: 1%;
 
 
-    border-radius: 0 0 0 50px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
 
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-    border-bottom: 2px solid black;
-
-    text-align: center;
-    /*margin: 1%;*/
+    border-radius: 5px;
+    border: 1px solid black;
 }
 
 
@@ -129,17 +144,17 @@ body {
 
 .game-table-container .cell {
     border: solid 1px black;
-    background: linear-gradient(to bottom left, #8D90A1, #bdc3c7);
 
     position: relative;
+    display: inline-block;
 
     margin: 0;
     padding: 0;
 
-    border-spacing: 0 0;
+    height: 10.78%;
+    width : 10.76%;
 
-    height: auto;
-    width: auto;
+    border-spacing: 0 0;
 }
 
 .cell.red:not(.robot) {
@@ -150,35 +165,20 @@ body {
     background: #0984e3;
 }
 
-.cell.flag {
-    background: #ffeaa7;
-}
-.cell.flag-blue:after, .cell.flag-red:after {
-    display: block;
-    width: 100%;
-    height: 100%;
-
-    content: "";
-}
-
-.cell.flag-blue:after {
-    background: url("../images/flag-blue.png") no-repeat center center;
+.cell.flag-blue {
+    background: #ffeaa7 url("../images/flag-blue.png") no-repeat center center;
     background-size: 75%;
 }
 
-.cell.flag-red:after {
-    background: url("../images/flag-red.png") no-repeat center center;
+.cell.flag-red {
+    background: #ffeaa7 url("../images/flag-red.png") no-repeat center center;
     background-size: 75%;
 }
 
 .robot {
     width: 100%;
     height: 100%;
-
     z-index: 100;
-
-    position: absolute;
-    display: block;
 }
 
 .robot-blue {
@@ -228,15 +228,7 @@ body {
 
 /* block */
 
-@keyframes block-animate {
-    0% { background-size: 100%; }
-    50% { background-size: 120%; }
-    100% { background-size: 100%; }
-}
-
 .block {
-    position: relative;
-
     width: 100px;
     height: 100px;
 
@@ -247,13 +239,6 @@ body {
     font-weight: bold;
     font-size: 3em;
     line-height: 100px;
-
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
-}
-
-.block.animate {
-    animation-name: block-animate;
-    animation-duration: 0.5s;
 }
 
 .block-red {
@@ -268,12 +253,12 @@ body {
 
 /* controls */
 
-img.control-block {
+.control-block {
     display: inline-block;
+    margin: 2.5% 0.70%;
 
-    width: calc(1/15 * 100%);
-    height: 60px;
-    margin: 1% 1% 3%;
+    width: 70px;
+    height: 70px;
 }
 
 .control-block:after {
@@ -293,119 +278,115 @@ img.control-block {
 /* RED */
 .block.red-east {
     font-size: 0;
-    background: url("../images/est-rouge.png") center center;
+    background: url("../images/est-rouge.png");
     background-size: cover;
 }
 .block.red-west {
     font-size: 0;
-    background: url("../images/ouest-rouge.png") center center;
+    background: url("../images/ouest-rouge.png");
     background-size: cover;
 }
 .block.red-north {
     font-size: 0;
-    background: url("../images/nord-rouge.png") center center;
+    background: url("../images/nord-rouge.png");
     background-size: cover;
 }
 .block.red-south {
     font-size: 0;
-    background: url("../images/sud-rouge.png") center center;
+    background: url("../images/sud-rouge.png");
     background-size: cover;
 }
 .block.red-eastx2 {
     font-size: 0;
-    background: url("../images/est-x2-rouge.png") center center;
+    background: url("../images/est-x2-rouge.png");
     background-size: cover;
 }
 .block.red-take {
     font-size: 0;
-    background: url("../images/prendre-rouge.png") center center;
+    background: url("../images/prendre-rouge.png");
     background-size: cover;
 }
 .block.red-put {
     font-size: 0;
-    background: url("../images/deposer-rouge.png") center center;
+    background: url("../images/deposer-rouge.png");
     background-size: cover;
 }
 .block.red-push {
     font-size: 0;
-    background: url("../images/repousser-rouge.png") center center;
+    background: url("../images/repousser-rouge.png");
     background-size: cover;
 }
 .block.red-cancel {
     font-size: 0;
-    background: url("../images/annuler-rouge.png") center center;
+    background: url("../images/annuler-rouge.png");
     background-size: cover;
 }
 .block.red-x2 {
     font-size: 0;
-    background: url("../images/x2-rouge.png") center center;
+    background: url("../images/x2-rouge.png");
     background-size: cover;
 }
 .block.red-pause {
     font-size: 0;
-    background: url("../images/pause-rouge.png") center center;
+    background: url("../images/pause-rouge.png");
     background-size: cover;
 }
 
 /* BLUE */
 .block.blue-east {
     font-size: 0;
-    background: url("../images/est-bleu.png") center center;
+    background: url("../images/est-bleu.png");
     background-size: cover;
 }
 .block.blue-west {
     font-size: 0;
-    background: url("../images/ouest-bleu.png") center center;
+    background: url("../images/ouest-bleu.png");
     background-size: cover;
 }
 .block.blue-north {
     font-size: 0;
-    background: url("../images/nord-bleu.png") center center;
+    background: url("../images/nord-bleu.png");
     background-size: cover;
 }
 .block.blue-south {
     font-size: 0;
-    background: url("../images/sud-bleu.png") center center;
+    background: url("../images/sud-bleu.png");
     background-size: cover;
 }
 .block.blue-westx2 {
     font-size: 0;
-    background: url("../images/ouest-x2-bleu.png") center center;
+    background: url("../images/ouest-x2-bleu.png");
     background-size: cover;
 }
 .block.blue-take {
     font-size: 0;
-    background: url("../images/prendre-bleu.png") center center;
+    background: url("../images/prendre-bleu.png");
     background-size: cover;
 }
 .block.blue-put {
     font-size: 0;
-    background: url("../images/deposer-bleu.png") center center;
+    background: url("../images/deposer-bleu.png");
     background-size: cover;
 }
 .block.blue-push {
     font-size: 0;
-    background: url("../images/repousser-bleu.png") center center;
+    background: url("../images/repousser-bleu.png");
     background-size: cover;
 }
 .block.blue-cancel {
     font-size: 0;
-    background: url("../images/annuler-bleu.png") center center;
+    background: url("../images/annuler-bleu.png");
     background-size: cover;
 }
 .block.blue-x2 {
     font-size: 0;
-    background: url("../images/x2-bleu.png") center center;
+    background: url("../images/x2-bleu.png");
     background-size: cover;
 }
 .block.blue-pause {
     font-size: 0;
-    background: url("../images/pause-bleu.png") center center;
+    background: url("../images/pause-bleu.png");
     background-size: cover;
-}
-
-.control-block {
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
 }
 
 /* RED */
@@ -517,15 +498,6 @@ img.control-block {
     100% { right:100%; }
 }
 
-@keyframes animation-eastx2 {
-    0% { left: 0;}
-    100% { left:200%; }
-}
-@keyframes animation-westx2 {
-    0% { right: 0;}
-    100% { right:200%; }
-}
-
 .animate-north {
     position: absolute;
     animation-name: animation-north;
@@ -544,16 +516,5 @@ img.control-block {
 .animate-west {
     position: absolute;
     animation-name: animation-west;
-    animation-duration: 1s;
-}
-
-.animate-eastx2 {
-    position: absolute;
-    animation-name: animation-eastx2;
-    animation-duration: 1s;
-}
-.animate-westx2 {
-    position: absolute;
-    animation-name: animation-westx2;
     animation-duration: 1s;
 }
