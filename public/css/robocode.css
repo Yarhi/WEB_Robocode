@@ -269,11 +269,13 @@ body {
 /* controls */
 
 img.control-block {
-    display: inline-block;
-
     width: calc(1/15 * 100%);
     height: 60px;
     margin: 1% 1% 3%;
+}
+
+img.control-block:not(.hidden) {
+    display: inline-block;
 }
 
 .control-block:after {
@@ -632,4 +634,77 @@ img.control-block {
     animation-name: animation-west-bloqued;
     animation-duration: 0.5s;
     animation-iteration-count: 2;
+}
+
+.hidden {
+    display: none;!important;
+}
+
+.overlay {
+    position: fixed;
+
+    width: 100%;
+    height: 100%;
+
+    top : 0;
+    left : 0;
+
+    z-index: 9999;
+    background: rgba(0,0,0,0.5);
+
+    margin : 0;
+    padding: 0;
+}
+
+.content {
+    background: linear-gradient(to top right, #076585, #cccccc);
+
+    margin: 2% auto;
+
+    width: 60%;
+    height: 80%;
+
+    border-radius: 5%;
+    border: solid 2px black;
+    box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
+    text-align: center;
+
+    font-size: 2em;
+
+    color : white;
+}
+
+@keyframes animation-win {
+    0%   { width: 20%; transform: rotate(90deg) }
+    5%  { width: 20%; transform: rotate(120deg) }
+    15%  { width: 20%; transform: rotate(60deg) }
+    20%  { width: 20%; transform: rotate(90deg) }
+    25%  { width: 25%; transform: rotate(90deg) }
+    30%  { width: 20%; transform: rotate(90deg) }
+    35%  { width: 25%; transform: rotate(90deg) }
+    40%  { width: 20%; transform: rotate(90deg) }
+
+    55%  { width: 20%; transform: rotate(90deg) }
+
+    60%  { width: 20%; transform: rotate(60deg) }
+    65%  { width: 20%; transform: rotate(120deg) }
+    70%  { width: 20%; transform: rotate(90deg) }
+    75%  { width: 25%; transform: rotate(90deg) }
+    80%  { width: 20%; transform: rotate(90deg) }
+    85%  { width: 25%; transform: rotate(90deg) }
+    90%   { width: 20%; transform: rotate(90deg) }
+
+}
+
+.overlay .content .robot {
+    width: 20%;
+
+    animation-name: animation-win;
+    animation-duration: 6s;
+
+    animation-iteration-count: infinite;
+
+    display: inline-block;
+    position: relative;
+    transform: rotate(90deg);
 }

@@ -47,17 +47,27 @@ class ControlBlock {
         var classList = Array.from(this.dom.classList);
 
         this.action = null;
+        var toRemove = null;
 
-        // Removing the class of the "action"
-        for ( var i = 0; i < controlsToActions.length; i++ )
+        // Searching the class of the "action"
+        for ( var i = 0; i < controlsToActions.length && toRemove === null; i++ )
         {
             if ( classList.includes( this.playerName + "-" + controlsToActions[i].class ) )
-                classList = classList.removeFromArray(this.playerName + "-" + controlsToActions[i].class);
+                toRemove = this.playerName + "-" + controlsToActions[i].class;
         }
 
         // Exceptions red special && blue special
-        if ( classList.includes("blue-westx2") ) classList = classList.removeFromArray("blue-westx2");
-        if ( classList.includes("red-eastx2") ) classList = classList.removeFromArray("red-eastx2");
+        if ( classList.includes("blue-westx2") ) toRemove = ("blue-westx2");
+        if ( classList.includes("red-eastx2") ) toRemove = ("red-eastx2");
+
+        // Removing the class of the "action"
+        classList = classList.removeFromArray(toRemove);
+
+        // Re-Displaying the block
+        controlSection.childNodes.forEach(function(e){
+            if ( e.classList.contains(toRemove) && e.classList.contains("hidden") )
+                e.classList.remove("hidden");
+        });
 
         // Setting new class
         this.dom.classList = classList.join(' ');
@@ -145,7 +155,6 @@ class Player {
                     if ( e.classList.contains("emoji") ) spanIndex = index;
                 });
 
-                console.log(spanIndex);
 
 
                 // Deleting after 1s (end of animation)
@@ -206,6 +215,8 @@ class Robot {
 
         this.orientationClass = "east";
         this.lastAction = null;
+
+        this.hasFlag = false;
     }
 
     setPos(x, y, animate) {
@@ -359,7 +370,7 @@ class Action {
 
         return true;
     }
-    //forward()   { }
+
     gox2(verify)      {
         var goEast = ( this.player.robot.name === 'red' );
 
@@ -406,10 +417,55 @@ class Action {
     }
 
     take(verify)      {
+        var cell = game.cells[this.player.robot.y][this.player.robot.x];
 
+        // return false if there is no flagf on the cell
+        if ( cell.gotFlag === null )
+            return false;
+
+        if ( verify === undefined ) {
+            // Setting the flag on the robot
+            this.player.robot.hasFlag = true;
+
+            // Clearing the cell
+            cell.dom.classList.remove("flag-" + this.player.name);
+        }
+
+        return true;
     }
 
     put(verify)       {
+        // Return false if the robot doesn't got a flag
+        if ( this.player.robot.hasFlag === false )
+            return false;
+
+        var cell = game.cells[this.player.robot.y][this.player.robot.x];
+
+        // Return false if the cell already got a flag
+        if ( cell.gotFlag !== null )
+            return false;
+
+        var name = ( this.player === game.players.red ) ? "blue" : "red";
+
+
+        var isInOtherBase = false;
+        // If the robot is in a case
+        for ( var i = 0; i < game[name + "Base"].length; i++ )
+            if ( cell === game[name + "Base"][i] ) isInOtherBase = true;
+
+        if ( isInOtherBase === false )
+            return false;
+
+        if ( verify === undefined )
+        {
+            // Setting the flag
+            cell.dom.classList.add("flag-" + this.player.name);
+            this.player.robot.hasFlag = false;
+
+            game[this.player.name + "Flag"]++;
+        }
+
+        return true;
 
     }
 
@@ -502,6 +558,9 @@ class Game {
         this.redBase = [];
         this.blueBase = [];
 
+        this.redFlag = 0;
+        this.blueFlag = 0;
+
         this.currentPlayer = this.players.red;
     }
 
@@ -582,9 +641,9 @@ class Game {
 
             // Adding the control block event that allow to clear
             tile.addEventListener("dblclick", function() {
-                console.log(game.currentPlayer.name, game.players[this.getAttribute("related-player")]);
                 if ( game.currentPlayer === game.players[this.getAttribute("related-player")] )
                     game.players[this.getAttribute("related-player")].controlBlock[this.getAttribute("data-id") - 1].clear();
+
             });
 
             // Adding the player's tile
@@ -687,6 +746,9 @@ class Game {
                     // Setting the action in player's actions and in the corresponding controlBlock
                     game.players[player].setAction(actionIndex, draggedElement.getAttribute("related-action"));
 
+                    // Hide the element
+                    draggedElement.classList.add("hidden");
+
                     // Reset values of target and source
                     draggedElement  = null;
                     dragTarget      = null;
@@ -701,6 +763,9 @@ class Game {
 
                 // all filled
                 if ( i === 5 ) return;
+
+                // Hide the element
+                this.classList.add("hidden");
 
                 // Adding the class of the current dragged element
                 game.players[player].controlBlock[i].dom.classList.add(this.classList[1]);
@@ -758,9 +823,12 @@ class Game {
             waitUntil( () => {
                 return ( game.currentPlayer.executingAction === false )
             }, () => {
-                var p = ( game.players.red === game.currentPlayer ) ? game.players.blue : game.players.red;
-                p.executeActions();
-                game.currentPlayer = p;
+                if ( game.redFlag !== 2 && game.blueFlag !== 2 )
+                {
+                    var p = ( game.players.red === game.currentPlayer ) ? game.players.blue : game.players.red;
+                    p.executeActions();
+                    game.currentPlayer = p;
+                }
             } );
         }
 
@@ -771,8 +839,41 @@ class Game {
         })
     }
 
+    static win()
+    {
+        var winner = ( game.redFlag === 2 ) ? game.players.red : game.players.blue;
+
+        var overlay = document.createElement("div");
+        var robot = document.createElement("div");
+        var text = document.createElement("h2");
+
+        text.innerText = "Le joueur " + winner.name + " a gagné !";
+
+        robot.classList.add("robot");
+        robot.classList.add("robot-" + ( winner.name === "red") ? "rouge" : "bleu" );
+        robot.classList.add("winner");
+
+        overlay.classList.add("overlay");
+
+        var content = document.createElement("div");
+        content.classList.add("content");
+
+        content.appendChild(text);
+        content.appendChild(robot);
+
+        overlay.appendChild(content);
+
+        document.getElementsByTagName("body")[0].appendChild(overlay);
+    }
+
     start()
     {
+        waitUntil( () => {
+            return ( game.redFlag === 2 || game.blueFlag === 2 );
+        }, () => {
+            Game.win();
+        } );
+
         this.playersChooseAction();
     }
 }
@@ -803,5 +904,3 @@ function init() {
 }
 
 init();
-
-
