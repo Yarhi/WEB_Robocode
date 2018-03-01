@@ -117,16 +117,96 @@ app.put('/chat/:from/:key', function(req, res) {
     else {
         res.status(401).end("Utilisateur incorrect");
     }
-})
+});
+
+/*
+ * <GAME>
+ */
+
+var actions = {
+    red     : [null, null, null, null, null],
+    blue    : [null, null, null, null, null]
+};
+
+var playersOnline = {
+    red     : false,
+    blue    : false
+};
+
+/*
+ * Retourne la couleur du joueur lors d'une nouvelle partie
+ */
+app.get('/game/get', function(req, res) {
+    var playerColor = 'red';
+
+    if ( playersOnline.red === true )
+        playerColor = 'blue';
+
+
+    if ( playersOnline.red === true && playersOnline.blue === true )
+    {
+        res.status(401).end("Partie déjà en cours");
+    }
+    else
+    {
+        playersOnline[playerColor] = true;
+        res.status(200).json(playerColor);
+    }
+
+});
+
+/*
+ * Ajoute une action au joueur à l'index spécifié
+ */
+app.put('/game/:player/:action/:index', function(req, res) {
+    var player = req.params.player;
+    var action = req.params.action;
+    var index  = req.params.index;
+
+    console.log("Le joueur rouge ajoute l'action " + action + " à l'index " + index);
+
+    actions[player][index] = action;
+
+    res.status(200).end();
+});
+
+/*
+ * Retourne le nombre d'actions ajoutées par le joueur
+ */
+app.get('/game/:player', function(req, res) {
+    var json = {number : 0};
+
+    var player = req.params.player;
+
+    for ( var i = 0; i < 5; i++ )
+        if ( actions[player][i] != null ) json.number++;
+
+    res.status(200).json(json);
+});
+
+/*
+ * Retourne les actions du joueur
+ */
+app.get('/game/actions/:player', function(req, res) {
+    var player = req.params.player;
+
+    var playerActions = actions[player];
+
+    actions[player] = [null, null, null, null, null];
+
+    res.status(200).json(playerActions);
+});
+
+
 
 
 /*
- *
+ * </GAME>
  */
 
-app.post("/game/:user/:user/", function(req, res) {
 
-});
+
+
 
 
 

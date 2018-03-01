@@ -1,224 +1,172 @@
-/* --- <VARIABLES> --- */
+/**
+ *  Utilisateur courant, objet { user: pseudo, key: cle }
+ */
+currentUser = null;
 
-var pseudoTitle     = document.getElementById("pseudo-title");
-var connectBtn      = document.getElementById("connect-btn");
-var usernameInput   = document.getElementById("input-username");
-
-var pseudoBox       = document.getElementById("pseudo-box");
-var chatBox         = document.getElementById("chat-box");
-
-var chatHeading     = document.getElementById("chat-heading");
-var sendBtn         = document.getElementById("button-send");
-var inputText       = document.getElementById("input-text");
-
-var chatMessages     = document.getElementById("chat-messages");
-var chatUsers        = document.getElementById("chat-users");
-
-var btnClose         = document.getElementById("close-btn");
-
-var token = 899103812;
-var username = "Gael";
-
-var usersSaved = [];
-
-var lastUpdate = 0;
-
-/* --- </VARIABLES> --- */
-
-/* --- <FUNCTIONS> --- */
-
-function ajax(data, type)
-{
-    var http = new XMLHttpRequest();
-
-    http.open(type, data.url, true);
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-    http.onreadystatechange = function() {
-        if ( http.readyState === 4 && http.status === 200 ) data.success(http.responseText);
-        else if ( http.readyState === 4 && http.status !== 200 ) data.error(http.responseText);
-    };
-
-    http.send( ( data.params === undefined ) ? null : data.params);
-}
-
-function refresh() {
-
-    ajax({
-        url : "/chat/"+ username +"/" + token + "/" + lastUpdate,
-        success : function(m){
-            var json = JSON.parse(m);
-
-            var users = json.users;
-            var msgs = json.general;
-            var prvt = json.user;
-
-            var all = sortMessages(json);
-
-            for ( var i = 0; i < users.length; i++ )
-            {
-                if ( ! usersSaved.includes(users[i]) )
-                    addUser(users[i]);
-            }
-
-            for ( var i = 0; i < all.length; i++ )
-            {
-                var classes = '';
-                var ms = getDate(all[i].when);
-
-                if ( username === all[i].from ) classes = 'me-text';
-                if ( all[i].from === null )
-                {
-                    classes = 'system-text';
-                    ms += " - (Système)"
-                }
-                else
-                    ms += " - " + all[i].from;
-
-                ms += " : " + all[i].text;
-
-                addMessage(ms, classes);
-
+/**
+ *  Connexion de l'utilisateur au chat.
+ */
+function connect() {
+    // recupération du pseudo
+    var user = document.getElementById("pseudo").value.trim();
+    if (! user) return;
+    var xhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                currentUser = JSON.parse(this.responseText);
+                sessionStorage.setItem("chat:credentials", this.responseText);
+                document.getElementById("login").innerHTML = currentUser.user;
+                swapView();
                 lastUpdate = Date.now();
+                retrieveMessages();
             }
-        },
-        error : function(m) {
-            console.error(m);
+            else {
+                alert(this.responseText);
+            }
         }
-    }, "GET");
+    }
+    xhttp.open("POST", "/chat/" + user, true);
+    xhttp.send();
 }
 
-function addMessage(m, classes) {
-    chatMessages.innerHTML += "<li class='" + classes + "' >" + m + "</li>"
+var xhrMsg = null;
+var lastUpdate = Date.now();
+function retrieveMessages() {
+    if (! xhrMsg) {
+        xhrMsg = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+        xhrMsg.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    afficherMessages(JSON.parse(this.responseText));
+                }
+                else {
+                    alert(this.responseText);
+                    clearTimeout(TO);
+                }
+            }
+        }
+    }
+    xhrMsg.open("GET", "/chat/" + currentUser.user + "/" + currentUser.key + "/" + lastUpdate, true);
+    xhrMsg.send();
+    setTimeout(retrieveMessages, 1000);
 }
 
-function addUser(m) {
-    var li = document.createElement("li");
-    li.innerText = m;
+/**
+ *  Affichage des messages récupérés depuis le serveur sous le format :
+ *  { general: [...], user: [...], users: [...] }
+ */
+function afficherMessages(data) {
 
-    li.addEventListener("click", function () {
-        var pseudo = inputText.value.split(" ")[0].replace("/to:", '');
-        var msgD = inputText.value.replace("/to:" + pseudo, "");
+    // fusion et ordonnancement des nouveaux messages
+    var allmessages = data.general.concat(data.user).sort(function(v1, v2) { return v1.when < v2.when; });
+    lastUpdate = (allmessages.length > 0) ? allmessages[allmessages.length-1].when*1+1 : lastUpdate;
 
-        inputText.value = "/to:" + m + ((! msgD.match(/^\s*$/)) ? " " : '') + msgD;
+    // traitement des emojis
+    function traiterEmoticones(txt) {
+        txt = txt.replace(/:[-]?\)/g,'<span class="emoji sourire"></span>');
+        txt = txt.replace(/:[-]?D/g,'<span class="emoji banane"></span>');
+        txt = txt.replace(/:[-]?[oO]/g,'<span class="emoji grrr"></span>');
+        txt = txt.replace(/<3/g,'<span class="emoji love"></span>');
+        txt = txt.replace(/:[-]?[Ss]/g,'<span class="emoji malade"></span>');
+        return txt;
+    }
 
-        inputText.focus();
+    // affichage des nouveaux messages
+    var bcMessages = document.querySelector("#content main");
+    allmessages.forEach(function(elem) {
+        var classe = "";
+        if (elem.from == currentUser.user) {
+            classe = "moi";
+        }
+        else if (elem.from == null) {
+            classe = "system";
+        }
+        else if (elem.to != null) {
+            classe = "mp";
+        }
+        var date = new Date(elem.when);
+        date = date.toISOString().substr(11,8);
+        if (elem.from == null) {
+            elem.from = "(Système)";
+        }
+
+        elem.text = traiterEmoticones(elem.text);
+
+        bcMessages.innerHTML += "<p class='" + classe + "'>" + date + " - " + elem.from + " : " + elem.text + "</p>";
     });
 
-    chatUsers.append(li);
-
-    usersSaved.push(m);
+    // affichage de la liste d'utilisateurs
+    var bcUsers = document.querySelector("#content aside").innerHTML = data.users.join("<br>");
 }
 
-function sortMessages(m) {
-    return m.user.concat(m.general).sort(function(a, b){ return (a.when < b.when); });
+
+/**
+ *  Envoyer un message
+ */
+function envoyer() {
+    var msg = document.getElementById("monMessage").value.trim();
+    if (!msg) return;
+    var xhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+    var to = null;
+
+    if (msg.startsWith("/to:")) {
+        var i = msg.indexOf(" ");
+        to = msg.substring(4, i);
+        msg = msg.substring(i);
+    }
+
+    var url = "/chat/" + currentUser.user + "/" + currentUser.key;
+    if (to) {
+        url += "/" + to;
+    }
+    xhttp.open("PUT", url, true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("message=" + msg);
+    document.getElementById("monMessage").value = "";
+    document.getElementById("monMessage").focus();
 }
 
-function getDate(timestamp) {
-    var d = new Date(parseInt(timestamp));
-    return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+
+/**
+ *  Démarrage : si l'utilisateur est déjà connecté (variable dans le sessionStorage),
+ *  sa reconnexion est automatique.
+ */
+document.addEventListener("DOMContentLoaded", function(e) {
+    currentUser = sessionStorage.getItem("chat:credentials");
+    if (currentUser != null) {
+        currentUser = JSON.parse(currentUser);
+        document.getElementById("login").innerHTML = currentUser.user;
+        swapView();
+        retrieveMessages();
+    }
+});
+
+
+/** Changer la vue entre la fenêtre de connexion et le chat */
+function swapView() {
+    document.getElementById("logScreen").classList.toggle("visible");
+    document.getElementById("content").classList.toggle("visible");
 }
 
-/* --- </FUNCTIONS> --- */
 
-
-connectBtn.addEventListener("click", function(){
-    if ( usernameInput.value !== '' && usernameInput.value !== null)
-    {
-
-        ajax({
-            url: "/chat/" + usernameInput.value,
-            params : 'a=b',
-            success: function (m) {
-                var json = JSON.parse(m);
-                if (json.key !== undefined) {
-                    token = json.key;
-                    username = usernameInput.value;
-
-                    pseudoBox.classList.add("hidden");
-                    chatBox.classList.remove("hidden");
-                    chatHeading.innerText = "Chat de Robocode - Utilisateur : " + username;
-                }
-            },
-            error : function (m) {
-                pseudoTitle.innerText = m;
+/**
+ *  Quitter le chat et revenir à la page d'accueil.
+ */
+function quitter() {
+    if (currentUser) {
+        var xhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+        xhttp.open("DELETE", "/chat/" + currentUser.user + "/" + currentUser.key, true);
+        xhttp.onreadystatechange = function() {
+            if (this.readyState >= 1) {
+                sessionStorage.removeItem("chat:credentials");
+                document.location.assign("../index.html");
             }
-        }, "POST");
+        }
+        xhttp.send();
     }
     else
-    {
-        pseudoTitle.innerText = "Pseudo invalide";
-    }
-});
-
-sendBtn.addEventListener("click", function(){
-    var msg = inputText.value;
-
-    if ( msg.includes("/to:") )
-    {
-        var pseudo = msg.split(" ")[0].replace("/to:", '');
-        var msgD = msg.replace("/to:" + pseudo, "");
-
-        ajax({
-            url : "/chat/" + username + "/" + token.toString() + "/" + pseudo,
-            params : "message=" + msgD,
-            success : function(m){
-                console.log(m);
-                refresh();
-                //var d = new Date();
-                //addMessage(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + " - " + username + " : " + "[MP à " + pseudo + "] " + msgD, 'me-text');
-            },
-            error : function(m) {
-                console.error(m);
-            }
-        }, "PUT");
-    }
-    else
-    {
-        ajax({
-            url : "/chat/" + username + "/" + token.toString() ,
-            params : "message=" + msg,
-            success : function(m){
-                refresh();
-                //addMessage(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + " - " + username + " : " + msg, 'me-text');
-            },
-            error : function(m) {
-                console.error(m);
-            }
-        }, "PUT");
-    }
-
-    inputText.value = "";
-
-});
-
-btnClose.addEventListener("click", function(){
-    ajax({
-        url : "/chat/" + username + "/" + token.toString() ,
-        success : function(m){
-            window.location.replace("/");
-        },
-        error : function(m) {
-            console.error(m);
-        }
-    }, "DELETE");
-});
-
-document.onbeforeunload = function() {
-    ajax({
-        url : "/chat/" + username + "/" + token.toString() ,
-        success : function(m){
-            window.location.replace("/");
-        },
-        error : function(m) {
-            console.error(m);
-        }
-    }, "DELETE");
+        document.location.assign("../index.html");
 };
-
-
-refresh();
-
-setInterval(function() {
-    refresh();
-}, 1000);

@@ -1,175 +1,175 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-
-
-html, body {
-    height: 100%;
+body{
+    padding: 0;
     margin: 0;
-    font-family: "Open Sans", serif;
+    font-family: sans-serif;
 }
-
-/* Pseudo box */
-
-.pseudo-box {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
-    background: lightgray;
+* {
+    box-sizing: border-box;
 }
-
-.pseudo-box .pseudo-body {
-    position: relative;
+#content {
+    position: absolute;
     top: 50%;
-    margin: -100px auto;
-    padding: 50px;
-
-    background: #fff;
-
-    width: 300px;
-    height:150px;
-
-
-    border: solid 3px black;
-    border-radius: 10%;
-    box-shadow: 3px 3px rgba(0,0,0,0.5);
-}
-
-.pseudo-box .pseudo-body h3 {
-    text-align: center;
-    font-size: 1em;
-}
-
-.pseudo-box .pseudo-body input {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.pseudo-btn {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-}
-
-.connect-btn {
-    float: left;
-}
-
-.cancel-btn {
-    float: right;
-
-}
-
-/* Chat box */
-
-.chat-box {
-    position: relative;
-    top: 45%;
-    margin: -20% auto;
-    width: 1200px;
-}
-
-.chat-heading {
-    position: relative;
-    border-top: solid 1px #2c3e50;
-    border-left: solid 1px #2c3e50;
-    border-right: solid 1px #2c3e50;
-
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    height: 500px;
+    width: 700px;
+    background-color: beige;
+    border: solid 1px #A0A0A0;
+    box-shadow: -10px 10px 20px #A0A0A0;
     padding: 10px;
-    width: 40%;
-    border-radius: 5% 5% 0 0;
-    background: #ecfff0;
-    top : 1px;
-    font-weight: bold;
-
-    box-shadow: 5px 0px rgba(0,0,0,0.3);
-
 }
-
-.chat-body {
-    border: solid 1px #2c3e50;
-    width: 100%;
-    height: 100%;
-    background: #ecfff0;
-    padding: 10px;
-
-    box-shadow: 5px 5px rgba(0,0,0,0.3);
-
-}
-
-.chat-messages {
-    display: inline-block;
-    background: #fff;
-    width: 62%;
-    height: 750px;
-
-    overflow-y: scroll;
-}
-
-.chat-messages, .chat-users li{
-    list-style: none;
-}
-
-.chat-users {
-    float: right;
-    position: relative;
-    display: inline-block;
-    background: #fff;
-    width: 33%;
-    height: 750px;
-
-    overflow-y: scroll;
-}
-
-.chat-users li {
-    cursor: pointer;
-}
-
-.chat-users li:hover {
-    color : #2b669a;
-}
-
-.chat-footer {
-    background: #ecfff0;
-    width:100%;
-    height: 40px;
-    padding-top: 15px;
-}
-
-
-/* Button */
-
-
-.chat-box button {
-    border-radius: 0;
+#content h2, #content h3 {
+    position: absolute;
+    background-color: inherit;
+    height: 22px;
     padding: 5px;
-    border : solid 1px #2c3e50;
-    background-color: #fff;
+    line-height: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px 5px 0 0;
+    border-top: inherit;
+    border-left: inherit;
+    border-right: inherit;
 }
-
-.input-text {
-    margin-left: 20px;
-    width: 400px;
+#content h2 {
+    top: -35px;
+    left: -1px;
 }
-
-.button-send {
-
+#content h3 {
+    right: -11px;
+    top: -28px;
+    transform-origin: left center;
+    transform: translateX(100%) rotate(90deg);
 }
-
-.button-close {
-    float: right;
-    margin-right: 20px;
+#content main {
+    position: relative;
+    height: calc(100% - 30px);
+    width: calc(100% - 170px);
+    background-color: white;
+    overflow-y: scroll;
+    line-height: 1.2;
 }
-
-.me-text {
+#content main p {
+    line-height: 1;
+    font-size: 16px;
+    margin: 3px;
+}
+#content main .mp {
+    color: darkblue;
+}
+#content main .moi {
     color: green;
 }
-
-.system-text {
-    color: #b92c28;
+#content main .system {
+    color: red;
 }
 
-.hidden {
+/** Pied de zone de chat */
+#content footer {
+    position: absolute;
+    bottom: 0;
+    padding: 0px;
+    width: calc(100% - 20px);
+    height: 30px;
+    background-color: inherit;
+}
+#content footer input {
+    height: 22px;
+    font-size: 15px;
+}
+#content footer input:first-child {
+    width: calc(100% - 250px);
+    font-size: 12px;
+}
+#content footer input:last-child {
+    float: right;
+}
+
+#content aside {
+    width: 160px;
+    float: right;
+    margin: 0px;
+    padding: 5px;
+    height: calc(100% - 30px);
+    background-color: white;
+    line-height: 1;
+    font-size: 14px;
+}
+
+/**
+ * Style pour les émoticones
+ */
+.emoji {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/emoji.png");
+    background-size: 72px 72px;
+}
+.rire {
+    background-position: -4px -4px;
+}
+.zzz {
+    background-position: -28px -4px;
+}
+.love {
+    background-position: -52px -4px;
+}
+.holala {
+    background-position: -4px -28px;
+}
+.grrr {
+    background-position: -28px -28px;
+}
+.triste {
+    background-position: -52px -28px;
+}
+.sourire {
+    background-position: -4px -52px;
+}
+.banane {
+    background-position: -28px -52px;
+}
+.malade {
+    background-position: -52px -52px;
+}
+
+
+body > div {
     display: none;
+}
+
+.visible {
+    display: block;
+}
+
+
+#logScreen {
+    background: rgba(200, 200, 200, 0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+#logScreen > div {
+    text-align: center;
+    width: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: white;
+    transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    border: solid 2px #000;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px #000;
+}
+#logScreen input {
+    padding: 3px;
+    font-size: 80%;
+    margin: 10px;
 }
