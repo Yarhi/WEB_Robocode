@@ -406,6 +406,15 @@ img.control-block:not(.hidden) {
     background-size: cover;
 }
 
+.block-red.hide {
+    background: url("../images/block-vide-rouge.png");!important;
+    background-size: cover;!important;
+}
+.block-blue.hide {
+    background: url("../images/block-vide-bleu.png");!important;
+    background-size: cover;!important;
+}
+
 .control-block {
     box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
 }

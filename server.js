@@ -120,11 +120,13 @@ app.put('/chat/:from/:key', function(req, res) {
 })
 
 
-/**
+/*
  *
  */
 
+app.post("/game/:user/:user/", function(req, res) {
 
+});
 
 
 

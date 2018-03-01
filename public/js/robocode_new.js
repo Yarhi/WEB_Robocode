@@ -660,6 +660,7 @@ class Game {
          *     B           R
          */
 
+        /*
         var disposition = {
             // LEFT             // CENTER        // RIGHT        // BOTTOM / TOP
             true    : [ this.cells[0][3], this.cells[0][5], this.cells[8][4], this.cells[7][4] ],
@@ -683,16 +684,54 @@ class Game {
             c.dom.classList.add("flag-" + (randDisposition ? 'blue' : 'red'));
             c.gotFlag = (randDisposition ? 'blue' : 'red');
         });
+        */
+
+        var disposition = {
+            //   LEFT               CENTER            RIGHT             TOP / BOT
+            top: [this.cells[0][3], this.cells[0][4], this.cells[0][5], this.cells[1][4]],
+            bot: [this.cells[8][3], this.cells[8][4], this.cells[8][5], this.cells[7][4]]
+        };
+
+        // Setting red flags
+        // 2 flags by side
+        for ( var k = 0; k < 2; k++ )
+        {
+            // Getting the side ( top or bottom )
+            var side = ( k  === 0 ) ? disposition.top : disposition.bot;
+            for ( var i = 0; i < 2; i++ )
+            {
+                // Getting a random cell from the side
+                var randDisposition = Math.floor( Math.random() * Math.floor(side.length) );
+
+                // Adding the flag
+                side[randDisposition].dom.classList.add("flag");
+                side[randDisposition].dom.classList.add("flag-red");
+                side[randDisposition].gotFlag = 'red';
+
+                // Deleting the cell from the array
+                side = side.removeFromArray(side[randDisposition]);
+            }
+        }
+
+        // Setting blue flags
+        disposition.top.forEach(function(c) {
+            c.dom.classList.add("flag");
+            c.dom.classList.add("flag-blue");
+            c.gotFlag = 'blue';
+        });
+
+        disposition.bot.forEach(function(c) {
+            c.dom.classList.add("flag");
+            c.dom.classList.add("flag-blue");
+            c.gotFlag = 'blue';
+        });
+
+
     }
 
     initRobots() {
-        var randomCell = Math.floor(Math.random() * 4);
 
-        var randomBluePos = randomCell, randomRedPos = randomCell;
-
-        // Then, robots positions can be "symetric"
-        if ( randomCell === 0 ) randomBluePos = 2;
-        if ( randomCell === 2 ) randomBluePos = 0;
+        var randomBluePos = Math.floor(Math.random() * 4), randomRedPos = Math.floor(Math.random() * 4);
 
         // Setting robots position
         game.robots.red.setPos(this.redBase[randomRedPos].x, this.redBase[randomRedPos].y, 0);
@@ -708,6 +747,16 @@ class Game {
 
     initControls(player) {
         controlSection.innerHTML = "";
+
+        var other = ( player === 'red' ) ? 'blue' : 'red';
+
+        game.players[player].controlBlock.forEach(function (e) {
+            e.dom.classList.remove("hide");
+        });
+
+        game.players[other].controlBlock.forEach(function (e) {
+            e.dom.classList.add("hide");
+        });
 
         for ( var i = 0; i < controlsToActions.length; i++ )
         {
@@ -796,7 +845,7 @@ class Game {
         waitUntil( () => {
             return (game.players.red.actionsValidated() === true);
         }, () => {
-            console .log("-- Callback 1 : game.players.RED.actions.length === 5");
+            console .log("-- Callback 1 : game.players.RED.actionsValidated() === TRUE");
 
             // Then, the blue player can choose his controlBlock
             sentences.chooseActions("bleu");
@@ -808,7 +857,7 @@ class Game {
         waitUntil( () => {
             return (game.players.blue.actionsValidated() === true);
         }, () => {
-            console .log("-- Callback 2 : game.players.BLUE.actions.length === 5");
+            console .log("-- Callback 2 : game.players.BLUE.actionsValidated === TRUE");
 
             // Playing actions of each players
             sentences.currentTour();
@@ -817,6 +866,14 @@ class Game {
     }
 
     playActions() {
+        game.players.red.controlBlock.forEach(function (e) {
+            e.dom.classList.remove("hide");
+        });
+
+        game.players.blue.controlBlock.forEach(function (e) {
+            e.dom.classList.remove("hide");
+        });
+
         game.currentPlayer = game.players.blue;
         for ( var i = 0; i < 10; i++ )
         {
@@ -847,10 +904,10 @@ class Game {
         var robot = document.createElement("div");
         var text = document.createElement("h2");
 
-        text.innerText = "Le joueur " + winner.name + " a gagné !";
+        text.innerText = "Le joueur " + (winner.name === "red" ? "rouge" : "blue") + " a gagné !";
 
         robot.classList.add("robot");
-        robot.classList.add("robot-" + ( winner.name === "red") ? "rouge" : "bleu" );
+        robot.classList.add("robot-" + winner.name);
         robot.classList.add("winner");
 
         overlay.classList.add("overlay");
