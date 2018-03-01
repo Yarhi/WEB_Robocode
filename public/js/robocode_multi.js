@@ -6,6 +6,11 @@ var blueControls    = document.getElementById("blue-sidebar");
 
 var controlSection  = document.getElementById("controls-section");
 
+var playerColor      = null;
+var otherPlayerColor = null;
+
+var playerValidatedAction = false;
+
 // The action which are related to classes
 var controlsToActions = [
     { action : "north",     class : "north" },
@@ -136,6 +141,7 @@ class Player {
         // Execute if the method isn't null
         if ( actionMethod !== null )
         {
+            console.log(actionMethod);
             var res = actionInstance[actionMethod]();
 
             // Impossible action
@@ -189,6 +195,13 @@ class Player {
             this.actions[actionExist] = null;
             this.controlBlock[actionExist].clear();
         }
+
+        ajax({
+            url : '/game/' + this.name + '/' + action + '/' + index,
+            success : function (data) {
+                console.log(data);
+            }
+        }, "PUT");
 
         this.actions[index] = action;
         this.controlBlock[index].action = action;
@@ -660,32 +673,6 @@ class Game {
          *     B           R
          */
 
-        /*
-        var disposition = {
-            // LEFT             // CENTER        // RIGHT        // BOTTOM / TOP
-            true    : [ this.cells[0][3], this.cells[0][5], this.cells[8][4], this.cells[7][4] ],
-            false   : [ this.cells[8][3], this.cells[8][5], this.cells[0][4], this.cells[1][4] ]
-        };
-
-        var randDisposition = Math.random() < 0.5;
-
-
-        // Si true : Player 1 = true, Player 2 = false;
-        // Sinon   : Player 2 = true, player 1 = false;
-
-        disposition.true.forEach(function(c) {
-            c.dom.classList.add("flag");
-            c.dom.classList.add("flag-" + (randDisposition ? 'red' : 'blue'));
-            c.gotFlag = (randDisposition ? 'red' : 'blue');
-        });
-
-        disposition.false.forEach(function(c) {
-            c.dom.classList.add("flag");
-            c.dom.classList.add("flag-" + (randDisposition ? 'blue' : 'red'));
-            c.gotFlag = (randDisposition ? 'blue' : 'red');
-        });
-        */
-
         var disposition = {
             //   LEFT               CENTER            RIGHT             TOP / BOT
             top: [this.cells[0][3], this.cells[0][4], this.cells[0][5], this.cells[1][4]],
@@ -747,6 +734,8 @@ class Game {
 
     initControls(player) {
         controlSection.innerHTML = "";
+
+        console.log(player);
 
         var other = ( player === 'red' ) ? 'blue' : 'red';
 
@@ -837,31 +826,43 @@ class Game {
         this.initBlocks();
 
         // Player red choose his controlBlock
-        sentences.chooseActions("rouge");
-        this.initControls("red");
-        game.currentPlayer = game.players.red;
+        sentences.chooseActions( (playerColor === "red") ? "rouge" : "bleu" );
+        this.initControls(playerColor);
+        game.currentPlayer = game.players[playerColor];
 
-        // Waiting until red player have finished to choose his controlBlock
-        waitUntil( () => {
-            return (game.players.red.actionsValidated() === true);
-        }, () => {
-            console .log("-- Callback 1 : game.players.RED.actionsValidated() === TRUE");
-
-            // Then, the blue player can choose his controlBlock
-            sentences.chooseActions("bleu");
-            this.initControls("blue");
-            game.currentPlayer = game.players.blue;
-        });
+        var verifyPlayerActions = setInterval(function(){
+            ajax({
+                url : '/game/' + otherPlayerColor,
+                success : function(data)
+                {
+                    if ( parseInt(data) === 5 )
+                        playerValidatedAction = true;
+                }
+            }, "GET")
+        }, 1000);
 
         // Waiting until blue player (and red played then) have finished to choose his controlBlock
         waitUntil( () => {
-            return (game.players.blue.actionsValidated() === true);
+            return ( playerValidatedAction === true && game.players[playerColor].actionsValidated() );
         }, () => {
-            console .log("-- Callback 2 : game.players.BLUE.actionsValidated === TRUE");
 
-            // Playing actions of each players
-            sentences.currentTour();
-            this.playActions();
+            ajax({
+                url : '/game/actions/' + otherPlayerColor,
+                success : function(data)
+                {
+                    // Getting adverse player action
+                    game.players[otherPlayerColor].actions = JSON.parse(data);
+
+                    clearInterval(verifyPlayerActions);
+
+                    console .log("-- Callback 1 : game.players."+ playerColor +".actionsValidated === TRUE");
+                    console .log("-- Callback 1 : game.players."+ otherPlayerColor +".actionsValidated === TRUE");
+
+                    // Playing actions of each players
+                    sentences.currentTour();
+                    game.playActions();
+                }
+            }, "GET");
         });
     }
 
@@ -982,14 +983,31 @@ Object.prototype.removeFromArray = function remove(element) {
 };
 
 function init() {
-    game = new Game();
-    game.initGrid();
+    ajax({
+        url : "/game/get",
+        success: function (m) {
+            if ( parseInt(m) === 1 )
+                playerColor = 'red';
+            else
+                playerColor = 'blue';
 
-    game.initFlags();
-    game.initRobots();
+            otherPlayerColor = ( playerColor === 'red' ) ? 'blue' : 'red';
+
+            if ( playerColor != null )
+            {
+                game = new Game();
+                game.initGrid();
+
+                game.initFlags();
+                game.initRobots();
 
 
-    game.start();
+                game.start();
+            }
+        }
+    }, "GET");
+
+
 }
 
 init();
