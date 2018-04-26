@@ -17,6 +17,10 @@ html, body {
     border: solid 2px black;
 }
 
+.untruc {
+    opacity: 0.2;
+}
+
 
 .work_zone .sidebar {
     padding: 0;
